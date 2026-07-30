@@ -6,30 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-# Grants read access to packages across the entire workflow
-permissions:
-  packages: write
-  contents: read # Often needed to read the source code repository
-
-jobs:
-  pipeline:
-    name: Run CI Pipeline
-    uses: ./.github/workflows/reusable-build.yml
-    with:
-      node-version: '22'
-      image-name: ${{ github.repository }}
-    secrets: inherit
-
-
-
-name: CI Pipeline
-
-on:
-  push:
-    branches: [ '**' ]
-  pull_request:
-    branches: [ main ]
-
 permissions:
   contents: read
   packages: write    
