@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main ]
 
+# Grants read access to packages across the entire workflow
+permissions:
+  packages: write
+  contents: read # Often needed to read the source code repository
+
 jobs:
   pipeline:
     name: Run CI Pipeline
