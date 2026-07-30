@@ -452,7 +452,7 @@ npm run lint:fix
 Mở `src/routes/api.js`:
 ```javascript
 // TÌM và XOÁ dòng này (khai báo biến mà không dùng):
-const unusedConfig = require('./config')  // ← XOÁ dòng này
+const unusedConfig = { timeout: 5000, retries: 3 };// ← XOÁ dòng này
 ```
 
 Mở `src/services/mathService.js`:
@@ -769,6 +769,9 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
 # Build image cũ (v6)
 git stash  # bỏ qua nếu gặp lỗi
 docker build -t ci-lab:old -f <(git show v6-docker-build:Dockerfile) .
+git show v6-docker-build:Dockerfile > Dockerfile.v6
+docker build -t ci-lab:old -f Dockerfile.v6 .
+
 
 # Build image mới (v8)
 docker build -t ci-lab:new .
