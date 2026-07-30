@@ -19,3 +19,31 @@ jobs:
       node-version: '22'
       image-name: ${{ github.repository }}
     secrets: inherit
+
+
+
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  packages: write    
+
+jobs:
+  pipeline:
+    name: Run CI Pipeline
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      node-version: '22'
+      image-name: ${{ github.repository }}
+      # --- GitOps: cập nhật image tag sau khi push ---
+      deploy-repo: 'rockman88v/ci-training-deployment'  # repo chứa Helm chart/config manifest
+      helm-chart-path: 'ci-training-lab/'                   # đường dẫn tới thư mục Helm chart trong repo đó
+      values-file: 'values.yaml'                            # tên file values
+      image-tag-key: 'image.tag'                            # YAML key (dot-notation) chứa image tag
+    secrets: inherit
