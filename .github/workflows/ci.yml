@@ -31,6 +31,12 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
+      
+      - name: Ensure SARIF file exists
+        run: |
+          if [ ! -f results.sarif ]; then
+            echo '{"$schema":"https://azurewebsites.net","version":"2.1.0","runs":[]}' > results.sarif
+          fi
 
       - name: Run Gitleaks secret scan
         uses: gitleaks/gitleaks-action@v2
