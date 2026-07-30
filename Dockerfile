@@ -18,6 +18,8 @@ RUN npm ci --only=production && npm cache clean --force
 # =============================================================================
 FROM node:22.23.2-alpine AS production
 
+RUN npm install -g npm@latest
+
 # ✅ Tạo user và group không có quyền root — nguyên tắc least privilege
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
