@@ -1,7 +1,7 @@
 # =============================================================================
 # Stage 1: Builder — cài đặt dependencies production
 # =============================================================================
-FROM node:22.17-alpine AS builder
+FROM node:22.23.2-alpine AS builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN npm ci --only=production && npm cache clean --force
 # =============================================================================
 # Stage 2: Production — image tối thiểu, chạy non-root
 # =============================================================================
-FROM node:22.17-alpine AS production
+FROM node:22.23.2-alpine AS production
 
 # ✅ Tạo user và group không có quyền root — nguyên tắc least privilege
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
