@@ -1,7 +1,7 @@
 # =============================================================================
 # Stage 1: Builder — cài đặt dependencies production
 # =============================================================================
-FROM node:22.17-alpine AS builder
+FROM node:22.23.2-alpine AS builder
 
 WORKDIR /app
 
@@ -11,19 +11,21 @@ COPY package*.json ./
 # ✅ npm ci thay vì npm install — đảm bảo version nhất quán với lock file
 # ✅ --only=production — không cài dev dependencies vào production image
 # ✅ npm cache clean — giảm kích thước image
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 # =============================================================================
 # Stage 2: Production — image tối thiểu, chạy non-root
 # =============================================================================
-#FROM node:22.17-alpine AS production
 FROM node:22.23.2-alpine AS production
-RUN npm install -g npm@latest
 
 # ✅ Tạo user và group không có quyền root — nguyên tắc least privilege
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 WORKDIR /app
+
+# ✅ Runtime chỉ cần node để chạy app; gỡ npm/npx giảm bề mặt tấn công và CVE scan noise
+RUN rm -rf /usr/local/lib/node_modules/npm \
+  && rm -f /usr/local/bin/npm /usr/local/bin/npx
 
 # ✅ Chỉ copy production node_modules từ builder — không có dev deps
 COPY --from=builder /app/node_modules ./node_modules
